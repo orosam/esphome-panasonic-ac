@@ -62,6 +62,9 @@ void PanasonicAC::read_data() {
 void PanasonicAC::update_outside_temperature(int8_t temperature) {
   if (temperature > TEMPERATURE_THRESHOLD) {
     ESP_LOGW(TAG, "Received out of range outside temperature: %d", temperature);
+    if (this->outside_temperature_sensor_ != nullptr && !std::isnan(this->outside_temperature_sensor_->state))
+      this->outside_temperature_sensor_->publish_state(NAN);
+
     return;
   }
 
